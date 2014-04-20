@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!--Se cargan los archivos de propiedades para las etiquetas, mensajes, titulos, ayudas y tooltips-->
+    <f:loadBundle basename="co.com.jeisoft.propiedades.etiquetas" var="msgEtiquetas"/>
+    <f:loadBundle basename="co.com.jeisoft.propiedades.titulos" var="msgTitulos"/>
+    <f:loadBundle basename="co.com.jeisoft.propiedades.tooltips" var="msgTooltips"/>
+    <f:loadBundle basename="co.com.jeisoft.propiedades.mensajes" var="msgMensajes"/>
+    <f:loadBundle basename="co.com.jeisoft.propiedades.ayudas" var="msgAyudas"/>
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Log in</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+
+            <p:dialog widgetVar="wdvdInicio" style="display:block; text-align:center !important;" header="#{msgTitulos.inicioDeSesion}" resizable="false" closable="false" modal="true" visible="true">
+                
+                <h:form id="frmLogin">
+                    <p:panel closable="false" collapsed="false" style="width: 100%; border: 0 ">
+                        <p:messages autoUpdate="true" closable="true" showDetail="false"/>
+                        <h:panelGrid columns="2" border="0">
+                            <h:outputText value="#{msgEtiquetas.usuario}"/>
+                            <p:inputText id="txtUsuario" binding="#{inicioSesionMB.txtUsuario}" autocomplete="false" required="true" requiredMessage="#{msgMensajes.usuarioObligatorio}"/>
+                            <h:outputText value="#{msgEtiquetas.contrasena}"/>
+                            <p:inputText id="txtContrasena" binding="#{inicioSesionMB.txtContrasena}" autocomplete="false" required="true" requiredMessage="#{msgMensajes.contrasenaObligatorio}"/>
+                        </h:panelGrid>
+
+                        <f:facet name="footer">
+                            <center>
+                                <h:panelGrid columns="3">
+                                    <p:commandButton action="#{inicioSesionMB.iniciarSesion()}" update=":frmLogin" icon="ui-icon-unlocked" value="#{msgEtiquetas.ingresar}"/>
+                                    <p:commandButton icon="ui-icon-key" update=":frmRecuperar" value="#{msgEtiquetas.olvido}" onclick="wdvdInicio.hide(); wdvdRecuperar.show()"/>
+                                    <p:commandButton icon="ui-icon-help" value="#{msgEtiquetas.ayuda}" onclick="wdvdInicio.hide(); wdvdAyuda.show()"/>
+                                </h:panelGrid>
+                            </center>
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+
+
+
+            <!--Dialogo para mostrar ayuda al usuario-->
+            <p:dialog width="448px" widgetVar="wdvdAyuda" resizable="false" closable="true" draggable="false" modal="true" onHide="wdvdInicio.show()" header="#{msgTitulos.informacionDeAyuda}">
+                <h:outputText value="#{msgAyudas.ayudaInicioSesion1}"/>
+                <p:separator/>
+                <h:outputText value="#{msgAyudas.ayudaInicioSesion2}"/>
+            </p:dialog>
+
+
+
+
+            <!--Dialogo para mostrar recuperacion de la contraseña al usuario-->
+            <p:dialog widgetVar="wdvdRecuperar" resizable="false" closable="true" draggable="false" modal="true" onHide="wdvdInicio.show()" header="#{msgTitulos.recuperarContraseña}">
+                <p:ajax event="close" update=":frmLogin"/>
+                <h:form id="frmRecuperar">
+                    <p:panel style="border: 0">
+                        <h:panelGrid columns="3" style="border: 0">
+                            <h:outputText value="#{msgEtiquetas.correo}"/>
+                            <p:inputText id="txtCorreo" binding="#{inicioSesionMB.txtCorreo}" required="true" requiredMessage="#{msgMensajes.correoObligatorio}"/>
+                            <p:message display="icon" for="txtCorreo"/>
+                        </h:panelGrid>
+                        <f:facet name="footer">
+                            <center>
+                                <p:commandButton icon="ui-icon-refresh" update=":frmRecuperar" value="#{msgEtiquetas.recuperar}"/>
+                            </center>
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+
+
+        </h:body>
+
+    </f:view>
+</html>
+
